@@ -26,6 +26,13 @@ resource "google_storage_bucket" "mybucket" {
     }
 }
 
+resource "google_storage_bucket_iam_binding" "example_binding" {
+  bucket = google_storage_bucket.mybucket.name
+  role = "roles/storage.objectUser"
+
+  members = ["user:nicomontenegrob@gmail.com"]
+}
+
 output "bucket_name" {
     value = google_storage_bucket.mybucket.name
 }
