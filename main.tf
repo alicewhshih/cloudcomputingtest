@@ -12,27 +12,24 @@ provider "google" {
   region = "us-west1"
 }
 
-resource "google_storage_bucket" "mybucket" {
-  name = "my-terraform-bucket-0975329667whs" # Ensure globally unique
-  location = "us-west1"
+resource "google_compute_instance" "vm_instance" {
+  name = "student-vm"
+  machine_type = "e2-medium"
+  zone = "us-central1-a"
 
-  versioning {
-    enabled = true
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
     }
+  }
 
-  labels = {
-    environment = "student-lab"
-    managed_by = "terraform"
+  network_interface {
+    network = "default"
+    access_config { # Enables external access (optional)
     }
+  }
 }
 
-resource "google_storage_bucket_iam_binding" "example_binding" {
-  bucket = google_storage_bucket.mybucket.name
-  role = "roles/storage.objectUser"
-
-  members = ["user:nicomontenegrob@gmail.com"]
-}
-
-output "bucket_name" {
-    value = google_storage_bucket.mybucket.name
+output "vm_external_ip" {
+    value = google_compute_instance.vm_instance.network_interface[0].access_config[0].nat_ip
 }
