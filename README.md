@@ -1,3 +1,7 @@
 # cloudcomputingtest
 Cloud computing course test repo.
-This is an example git repo.
+
+### Terraform code
+terraform init
+terraform plan
+terraform apply
